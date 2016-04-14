@@ -1,6 +1,7 @@
 package main
 
 import (
+	"time"
 	"os"
 	"net/http"
 	"io/ioutil"
@@ -67,11 +68,22 @@ func (h my_handler) ServeHTTP(wr http.ResponseWriter, re *http.Request) {
 
 	must_connect := re.FormValue("connect")=="true"
 	expected_top_after := btc.NewUint256FromString(re.FormValue("newtop"))
+	bid := re.FormValue("blockid")
 
 	defer func() {
 		println("last_block:", BlockChain.BlockTreeEnd.BlockHash.String(), BlockChain.BlockTreeEnd.Height, len(cache))
 		if BlockChain.BlockTreeEnd.BlockHash.Equal(expected_top_after) {
 			wr.Write([]byte("ok"))
+			if bid=="b1004" {
+				println("All tests done OK")
+				go func() {
+					time.Sleep(3e9)
+					BlockChain.Close()
+					os.RemoveAll(DatabaseDir)
+					os.Remove("dupa.bin")
+					os.Exit(0)
+				}()
+			}
 		} else {
 			println("expected_block:", expected_top_after.String(), re.FormValue("newheight"))
 			wr.Write([]byte("error"))
@@ -79,10 +91,9 @@ func (h my_handler) ServeHTTP(wr http.ResponseWriter, re *http.Request) {
 	}()
 
 	println()
-	println("==============================================================================")
-	println("NewBlock", re.FormValue("blockid"))
+	println("NewBlock", bid)
 
-	if re.FormValue("blockid")=="b61" {
+	if bid=="b61" {
 		println("Ignore test b61 as it won't happen in the real world anymore")
 		return
 	}
@@ -107,7 +118,7 @@ func (h my_handler) ServeHTTP(wr http.ResponseWriter, re *http.Request) {
 		}
 		if !must_connect {
 			if maybelater {
-				println("----MAYBE-LATER---")
+				println("maybe later")
 				cache_block(block)
 			}
 			return
@@ -135,7 +146,7 @@ func main() {
 
 	chain.MaxPOWBits = 0x207fffff
 	chain.MaxPOWValue, _ = new(big.Int).SetString("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", 16)
-	chain.Unspent.UnwindBufLen = 1008
+	BlockChain.Unspent.UnwindBufLen = 1008
 
 	http.ListenAndServe("127.0.0.1:18444", new(my_handler))
 
