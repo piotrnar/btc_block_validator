@@ -75,12 +75,11 @@ func (h my_handler) ServeHTTP(wr http.ResponseWriter, re *http.Request) {
 		if BlockChain.BlockTreeEnd.BlockHash.Equal(expected_top_after) {
 			wr.Write([]byte("ok"))
 			if bid=="b1004" {
-				println("All tests done OK")
-				go func() {
-					time.Sleep(3e9)
+				println("All tests PASSED")
+				go func() { // start it in a gouroutine so http server would still send the response
+					time.Sleep(1e9)
 					BlockChain.Close()
 					os.RemoveAll(DatabaseDir)
-					os.Remove("dupa.bin")
 					os.Exit(0)
 				}()
 			}
@@ -146,7 +145,7 @@ func main() {
 
 	chain.MaxPOWBits = 0x207fffff
 	chain.MaxPOWValue, _ = new(big.Int).SetString("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", 16)
-	BlockChain.Unspent.UnwindBufLen = 1008
+	BlockChain.Unspent.UnwindBufLen = 1200
 
 	http.ListenAndServe("127.0.0.1:18444", new(my_handler))
 
