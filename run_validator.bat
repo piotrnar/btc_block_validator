@@ -5,4 +5,5 @@ go build block_validator.go
 if errorlevel 1 goto fin
 echo While the validator is running feed it with the test blocks by executing: java -jar bitcoin.jar
 block_validator.exe
+del block_validator.exe next_block.exe
 :fin
