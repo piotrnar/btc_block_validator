@@ -19,6 +19,7 @@ func main() {
 	}
 
 	bl, _ := ioutil.ReadFile("dupa.bin")
+	os.Remove("dupa.bin")
 	if len(bl) < 8 {
 		fmt.Println("Incorrect dupa.bin")
 		os.Exit(1)
