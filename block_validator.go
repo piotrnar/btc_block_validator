@@ -135,6 +135,7 @@ func main() {
 
 	chain.MaxPOWBits = 0x207fffff
 	chain.MaxPOWValue, _ = new(big.Int).SetString("7fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff", 16)
+	chain.Unspent.UnwindBufLen = 1008
 
 	http.ListenAndServe("127.0.0.1:18444", new(my_handler))
 
