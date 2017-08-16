@@ -139,9 +139,9 @@ func (h my_handler) ServeHTTP(wr http.ResponseWriter, re *http.Request) {
 
 func main() {
 	os.RemoveAll(DatabaseDir)
-	chain.NewChainExt(DatabaseDir,
+	BlockChain = chain.NewChainExt(DatabaseDir,
 		btc.NewUint256FromString("0f9188f13cb7b2c71f2a335e3a4fc328bf5beb436012afca590b1a11466e2206"),
-		true, &chain.NewChanOpts{}, &BlockChain)
+		true, &chain.NewChanOpts{})
 
 	BlockChain.Unspent.UnwindBufLen = 1200
 
