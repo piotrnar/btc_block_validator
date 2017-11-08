@@ -71,8 +71,9 @@ func (h my_handler) ServeHTTP(wr http.ResponseWriter, re *http.Request) {
 	bid := re.FormValue("blockid")
 
 	defer func() {
-		println("last_block:", BlockChain.BlockTreeEnd.BlockHash.String(), BlockChain.BlockTreeEnd.Height, len(cache))
-		if BlockChain.BlockTreeEnd.BlockHash.Equal(expected_top_after) {
+		last := BlockChain.LastBlock()
+		println("last_block:", last.BlockHash.String(), last.Height, len(cache))
+		if last.BlockHash.Equal(expected_top_after) {
 			wr.Write([]byte("ok"))
 			if bid=="b1004" {
 				println("All tests PASSED")
