@@ -142,7 +142,7 @@ func main() {
 	os.RemoveAll(DatabaseDir)
 	BlockChain = chain.NewChainExt(DatabaseDir,
 		btc.NewUint256FromString("0f9188f13cb7b2c71f2a335e3a4fc328bf5beb436012afca590b1a11466e2206"),
-		true, &chain.NewChanOpts{})
+		true, &chain.NewChanOpts{}, nil/*&chain.BlockDBOpts{MaxCachedBlocks:500}*/)
 
 	BlockChain.Unspent.UnwindBufLen = 1200
 
