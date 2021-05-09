@@ -68,7 +68,7 @@ func (h my_handler) ServeHTTP(wr http.ResponseWriter, re *http.Request) {
 
 	must_connect := re.FormValue("connect")=="true"
 	expected_top_after := btc.NewUint256FromString(re.FormValue("newtop"))
-	bid := re.FormValue("blockid")
+	bid := strings.Trim(re.FormValue("blockid"), "\"")
 
 	defer func() {
 		last := BlockChain.LastBlock()

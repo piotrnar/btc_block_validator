@@ -13,8 +13,8 @@ import (
 )
 
 func main() {
-	if len(os.Args) != 6 {
-		fmt.Println("Expected 5 command line args: bool bool hexdata uint string")
+	if len(os.Args) < 6 {
+		fmt.Println("Expected 6 command line args: bool bool hexdata uint string, got", len(os.Args))
 		os.Exit(1)
 	}
 
