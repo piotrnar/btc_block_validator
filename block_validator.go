@@ -36,7 +36,7 @@ func cache_block(bl *btc.Block) {
 
 func redo_cached_blocks() bool {
 	for k, block := range cache {
-		er, _, maybelater := BlockChain.CheckBlock(block)
+		_, maybelater, er := BlockChain.CheckBlock(block)
 		if er != nil {
 			if !maybelater {
 				delete(cache, k)
@@ -104,7 +104,7 @@ func (h my_handler) ServeHTTP(wr http.ResponseWriter, re *http.Request) {
 	//println("Expected new height:", re.FormValue("newheight"))
 	//println("Data length:", len(bl))
 
-	er, _, maybelater := BlockChain.CheckBlock(block)
+	_, maybelater, er := BlockChain.CheckBlock(block)
 
 	if er != nil {
 		rpc_res := rpc_result(er)
